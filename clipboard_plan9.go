@@ -1,14 +1,16 @@
-// Copyright 2013 @atotto. All rights reserved.
+// Copyright (c) 2024 duggavo.
+// Copyright (c) 2013 Ato Araki. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build plan9
 // +build plan9
 
 package clipboard
 
 import (
+	"io"
 	"os"
-	"io/ioutil"
 )
 
 func readAll() (string, error) {
@@ -18,11 +20,11 @@ func readAll() (string, error) {
 	}
 	defer f.Close()
 
-	str, err := ioutil.ReadAll(f)
+	str, err := io.ReadAll(f)
 	if err != nil {
 		return "", err
 	}
-	
+
 	return string(str), nil
 }
 
@@ -32,11 +34,11 @@ func writeAll(text string) error {
 		return err
 	}
 	defer f.Close()
-	
+
 	_, err = f.Write([]byte(text))
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }

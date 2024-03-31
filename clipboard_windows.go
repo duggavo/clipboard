@@ -1,7 +1,9 @@
-// Copyright 2013 @atotto. All rights reserved.
+// Copyright (c) 2024 duggavo.
+// Copyright (c) 2013 Ato Araki. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build windows
 // +build windows
 
 package clipboard
@@ -52,8 +54,11 @@ func waitOpenClipboard() error {
 }
 
 func readAll() (string, error) {
-	// LockOSThread ensure that the whole method will keep executing on the same thread from begin to end (it actually locks the goroutine thread attribution).
-	// Otherwise if the goroutine switch thread during execution (which is a common practice), the OpenClipboard and CloseClipboard will happen on two different threads, and it will result in a clipboard deadlock.
+	// LockOSThread ensure that the whole method will keep executing on the same thread
+	// from begin to end (it actually locks the goroutine thread attribution).
+	// Otherwise if the goroutine switch thread during execution (which is a common practice),
+	// the OpenClipboard and CloseClipboard will happen on two different threads,
+	// and it will result in a clipboard deadlock.
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 	if formatAvailable, _, err := isClipboardFormatAvailable.Call(cfUnicodetext); formatAvailable == 0 {
@@ -92,8 +97,11 @@ func readAll() (string, error) {
 }
 
 func writeAll(text string) error {
-	// LockOSThread ensure that the whole method will keep executing on the same thread from begin to end (it actually locks the goroutine thread attribution).
-	// Otherwise if the goroutine switch thread during execution (which is a common practice), the OpenClipboard and CloseClipboard will happen on two different threads, and it will result in a clipboard deadlock.
+	// LockOSThread ensure that the whole method will keep executing on the same thread
+	// from begin to end (it actually locks the goroutine thread attribution).
+	// Otherwise if the goroutine switch thread during execution (which is a common practice),
+	// the OpenClipboard and CloseClipboard will happen on two different threads,
+	// and it will result in a clipboard deadlock.
 	runtime.LockOSThread()
 	defer runtime.UnlockOSThread()
 
@@ -108,7 +116,10 @@ func writeAll(text string) error {
 		return err
 	}
 
-	data := syscall.StringToUTF16(text)
+	data, err := syscall.UTF16FromString(text)
+	if err != nil {
+		return err
+	}
 
 	// "If the hMem parameter identifies a memory object, the object must have
 	// been allocated using the function with the GMEM_MOVEABLE flag."

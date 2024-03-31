@@ -1,4 +1,5 @@
-// Copyright 2013 @atotto. All rights reserved.
+// Copyright (c) 2024 duggavo.
+// Copyright (c) 2013 Ato Araki. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -7,13 +8,13 @@ package clipboard_test
 import (
 	"testing"
 
-	. "github.com/atotto/clipboard"
+	. "github.com/duggavo/clipboard"
 )
 
-func TestCopyAndPaste(t *testing.T) {
-	expected := "日本語"
+const lorem = "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
 
-	err := WriteAll(expected)
+func TestCopyAndPaste(t *testing.T) {
+	err := WriteAll(lorem)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -23,8 +24,8 @@ func TestCopyAndPaste(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if actual != expected {
-		t.Errorf("want %s, got %s", expected, actual)
+	if actual != lorem {
+		t.Errorf("want %s, got %s", lorem, actual)
 	}
 }
 
@@ -66,8 +67,7 @@ func BenchmarkReadAll(b *testing.B) {
 }
 
 func BenchmarkWriteAll(b *testing.B) {
-	text := "いろはにほへと"
 	for i := 0; i < b.N; i++ {
-		WriteAll(text)
+		WriteAll(lorem)
 	}
 }

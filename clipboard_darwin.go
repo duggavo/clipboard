@@ -1,7 +1,9 @@
-// Copyright 2013 @atotto. All rights reserved.
+// Copyright (c) 2024 duggavo.
+// Copyright (c) 2013 Ato Araki. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build darwin
 // +build darwin
 
 package clipboard
